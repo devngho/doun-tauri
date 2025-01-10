@@ -1,0 +1,38 @@
+{
+  "name": "doun-tauri",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "tauri": "tauri"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2.0.0",
+    "@tauri-apps/plugin-dialog": "~2.0.0",
+    "@tauri-apps/plugin-shell": "~2.0.0",
+    "setimmediate": "^1.0.5",
+    "worker-timers": "^7.0.77"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^2.0.0",
+    "@tauri-apps/cli": "2.0.0",
+    "@tsconfig/svelte": "^3.0.0",
+    "@types/node": "^18.7.10",
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.26",
+    "sass": "^1.69.4",
+    "svelte": "^3.54.0",
+    "svelte-awesome-color-picker": "^2.4.7",
+    "svelte-check": "^3.0.0",
+    "svelte-preprocess": "^5.0.0",
+    "tailwindcss": "^3.3.3",
+    "tslib": "^2.4.1",
+    "typescript": "^4.9.5",
+    "vite": "^4.2.1"
+  },
+  "packageManager": "yarn@4.5.0"
+}

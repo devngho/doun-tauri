@@ -1,0 +1,123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+	button:not(.except) {
+		@apply bg-primary hover:bg-primary-dark dark:bg-primary dark:hover:bg-primary-dark active:scale-90 text-white font-bold py-2 px-4 rounded transition-all ease-in-out shadow-md dark:shadow-gray-900;
+	}
+
+	button:not(.except):disabled {
+		@apply bg-gray-500 hover:bg-gray-600 text-gray-200 dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-gray-300 active:scale-100 shadow-sm;
+	}
+
+	button.error {
+		@apply bg-red-500 dark:bg-red-700 text-white !important;
+	}
+
+	button.unselected {
+		@apply bg-gray-500 dark:bg-gray-700 hover:bg-gray-700 dark:hover:bg-gray-600;
+	}
+
+	button.tab {
+		@apply text-black dark:text-white bg-gray-100 dark:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-800;
+	}
+}
+
+@font-face {
+	font-family: NanumBarunGothic;
+	src: url('$fonts/NanumBarunGothic.woff2') format('woff2');
+}
+
+@font-face {
+	font-family: NanumSquare;
+	src: url('$fonts/NanumSquareR.woff2') format('woff2');
+}
+
+a {
+	@apply text-primary hover:text-primary-dark dark:text-primary-light dark:hover:text-primary;
+}
+
+.wrapper {
+	@apply dark:bg-gray-600 !important;
+}
+
+.input-container {
+	@apply bg-gray-100 dark:bg-gray-900 rounded-md shadow-md;
+}
+
+.input-container>input {
+	@apply bg-transparent border-none focus:ring-0 focus:outline-none !important;
+}
+
+.dropdown-content {
+	display: none;
+	min-width: 160px;
+	@apply z-10 shadow-md bg-gray-100 dark:bg-gray-900 rounded-md absolute;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {
+	@apply bg-gray-100 dark:bg-gray-900
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+	display: block;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {
+	@apply bg-primary
+}
+
+* {
+	-ms-overflow-style: none;
+	/* Internet Explorer 10+ */
+	scrollbar-width: none;
+	/* Firefox */
+}
+
+*::-webkit-scrollbar {
+	display: none;
+	/* Safari and Chrome */
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+	-moz-appearance: textfield;
+}
+
+input:focus {
+	outline-width: 0.1rem;
+	@apply outline-gray-300;
+}
+
+input {
+	color-scheme: var(--theme);
+}
+
+:root {
+	@apply bg-gray-950 transition-colors duration-500;
+	font-family: NanumBarunGothic;
+}
+
+:root:not(:has(.dark)) {
+	@apply bg-gray-100 transition-colors duration-500;
+}
+
+.hover-icon {
+	@apply p-1 bg-gray-300 dark:bg-gray-900 rounded-md text-black dark:text-white w-fit;
+}
+
+.hover:hover>.hover-content {
+	@apply p-2 bg-gray-100 dark:bg-gray-900 rounded-md text-black dark:text-white shadow-md;
+	max-width: 50vw;
+	text-wrap: balanced;
+}
