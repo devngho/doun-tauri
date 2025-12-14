@@ -47,6 +47,6 @@ jobs:
       - name: Build the app
         uses: tauri-apps/tauri-action@v0
       - name: Upload a Build Artifact
-        uses: actions/upload-artifact@v3.1.2
+        uses: actions/upload-artifact@v6.0.0
         with:
           path: ./src-tauri/target/release/bundle/
