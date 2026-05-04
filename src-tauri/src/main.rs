@@ -202,6 +202,8 @@ async fn is_first_launch() -> bool {
 }
 
 fn main() {
+    std::env::set_var("GDK_BACKEND", "wayland");
+    
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_dialog::init())
