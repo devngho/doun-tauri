@@ -1,7 +1,7 @@
 <script lang="ts">
   import { redirect } from "../page";
   interface Props {
-    [key: string]: any
+    [key: string]: any;
   }
 
   let { ...props }: Props = $props();
@@ -10,7 +10,7 @@
 <article class="p-8 pt-24 w-screen" id={props._page}>
   <div class="flex flex-col justify-center items-center w-screen">
     <h1 class="text-4xl">타종기</h1>
-    <span class="text-xl">v1.0.6</span>
+    <span class="text-xl">v1.1.0</span>
   </div>
 
   <div class="h-4"></div>
@@ -56,8 +56,7 @@
       >
       -
       <!-- svelte-ignore a11y_invalid_attribute -->
-      <a href="#" onclick={() => redirect("/license/apache-2.0")}>Apache-2.0</a
-      >
+      <a href="#" onclick={() => redirect("/license/apache-2.0")}>Apache-2.0</a>
       Microsoft Corporation
     </li>
     <li>
@@ -67,8 +66,7 @@
       <a href="#" onclick={() => redirect("/license/mit")}>MIT License</a>
       or
       <!-- svelte-ignore a11y_invalid_attribute -->
-      <a href="#" onclick={() => redirect("/license/apache-2.0")}>Apache-2.0</a
-      >
+      <a href="#" onclick={() => redirect("/license/apache-2.0")}>Apache-2.0</a>
     </li>
   </ul>
   <h2 class="text-2xl mt-4">가이드</h2>
