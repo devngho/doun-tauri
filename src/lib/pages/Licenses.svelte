@@ -1,4 +1,12 @@
-<article class="p-8 pt-24" id={$$props._page}>
+<script lang="ts">
+    interface Props {
+        [key: string]: any
+    }
+
+    let { ...props }: Props = $props();
+</script>
+
+<article class="p-8 pt-24" id={props._page}>
     {#if location.pathname == "/license/apache-2.0"}
         <pre style="word-wrap: break-word; white-space: pre-wrap;">
     Apache License

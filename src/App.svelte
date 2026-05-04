@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from "svelte/legacy";
+
   import { onMount as onLoad } from "./lib/onMount";
   import { onMount } from "svelte";
   import "./app.css";
@@ -11,10 +13,10 @@
   import { hexToRgb, rgbToHSL } from "./lib/color";
   import SlimIndex from "./lib/pages/SlimIndex.svelte";
 
-  let currentPage = "";
-  let isAprilFool = false;
+  let currentPage = $state("");
+  let isAprilFool = $state(false);
 
-  $: isIntroducePage = currentPage.startsWith("introduce");
+  let isIntroducePage = $derived(currentPage.startsWith("introduce"));
 
   daysOfWeek.subscribe((_) => {
     const now = Dates.now();
@@ -29,34 +31,36 @@
     log({ message: `path: ${window.location.pathname}` });
     currentPage =
       Object.keys(pages).findLast((v) =>
-        new RegExp(v, "g").test(window.location.pathname.slice(1))
+        new RegExp(v, "g").test(window.location.pathname.slice(1)),
       ) ?? "";
   }
 
-  $: log({ message: `current page: ${currentPage}` });
+  $effect(() => {
+    log({ message: `current page: ${currentPage}` });
+  });
 
   window.addEventListener("popstate", updatePage);
 
-  let isInitFunc: Promise<void> | null = null;
+  let isInitFunc: Promise<void> | null = $state(null);
   onMount(() => {
     isInitFunc = onLoad();
     updatePage();
   });
 
   let isSlimQuery = window.matchMedia("(max-width: 1024px)");
-  let isSlim = isSlimQuery.matches;
+  let isSlim = $state(isSlimQuery.matches);
   isSlimQuery.addEventListener(
     "change",
-    (e) => (isSlim = $settings.useSlim ? e.matches : false)
+    (e) => (isSlim = $settings.useSlim ? e.matches : false),
   );
 
-  let cssVar = `
+  let cssVar = $state(`
 	--color-primary: ${hexToRgb($settings.primaryColor).join(" ")};
 	--color-primary-h: ${rgbToHSL($settings.primaryColor)[0]};
 	--color-primary-s: ${rgbToHSL($settings.primaryColor)[1]}%;
 	--color-primary-l: ${rgbToHSL($settings.primaryColor)[2]}%;
 	--theme: ${$settings.theme};
-	`;
+	`);
 
   settings.subscribe((v) => {
     cssVar = `
@@ -78,7 +82,7 @@
     {#if isAprilFool}
       <div class="fixed bottom-0 right-0">
         <button
-          on:click={() => {
+          onclick={() => {
             isAprilFool = false;
           }}>만우절 모드 해제하기</button
         >
@@ -91,10 +95,8 @@
       {/if}
 
       {#await isInitFunc then}
-        <svelte:component
-          this={pages[currentPage].component}
-          _page={currentPage}
-        />
+        {@const SvelteComponent = pages[currentPage].component}
+        <SvelteComponent _page={currentPage} />
       {/await}
     {:else}
       <SlimIndex {isAprilFool} />

@@ -1,9 +1,13 @@
 <script lang="ts">
     import type { Log } from "../logger";
 
-    export let log: Log;
+    interface Props {
+        log: Log;
+    }
+
+    let { log }: Props = $props();
     let length = JSON.stringify(log.data)?.length ?? 0;
-    let isLogFolded = length > 100;
+    let isLogFolded = $state(length > 100);
 </script>
 
 <div>
@@ -11,7 +15,7 @@
     {#if !isLogFolded}
         {JSON.stringify(log.data) ?? ""}
     {:else}
-        <button on:click={() => (isLogFolded = false)}>
+        <button onclick={() => (isLogFolded = false)}>
             {length}자 펼치기
         </button>
     {/if} : {log.time}

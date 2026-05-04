@@ -3,7 +3,11 @@
     import type { Schedules } from "../schedule";
     import { Dates } from "../daytime";
 
-    export let template: Schedules;
+    interface Props {
+        template: Schedules;
+    }
+
+    let { template = $bindable() }: Props = $props();
 
     function getDayweekName(dayOfWeek: string) {
         return DayOfWeek[dayOfWeek as keyof typeof DayOfWeek];
@@ -11,7 +15,7 @@
 </script>
 
 {#if template?.name !== undefined}
-    <!-- svelte-ignore a11y-invalid-attribute -->
+    <!-- svelte-ignore a11y_invalid_attribute -->
     <input
         type="string"
         class="mr-1 bg-gray-100 dark:bg-gray-900 rounded px-2 w-64"
@@ -23,7 +27,7 @@
         type="date"
         class="bg-gray-100 dark:bg-gray-900 rounded px-2 w-64"
         value={template.specifyDate.formatTime()}
-        on:change={(e) => {
+        onchange={(e) => {
             if (e.target === null) return;
             //@ts-ignore
             template.specifyDate = Dates.parseDate(e.target.value);

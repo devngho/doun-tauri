@@ -3,8 +3,12 @@
     import Dropdown from "./Dropdown.svelte";
     import TemplateDropdownBody from "./TemplateDropdownBody.svelte";
 
-    export let template: Schedules;
-    export let idx: number;
+    interface Props {
+        template: Schedules;
+        idx: number;
+    }
+
+    let { template = $bindable(), idx = $bindable() }: Props = $props();
 </script>
 
 <Dropdown>

@@ -2,7 +2,11 @@
     import { Dates, DayOfWeek } from "../daytime";
     import type { Schedules } from "../schedule";
 
-    export let template: Schedules;
+    interface Props {
+        template: Schedules;
+    }
+
+    let { template = $bindable() }: Props = $props();
 
     function getValue(template: Schedules) {
         if (template.name !== undefined) {
@@ -16,13 +20,13 @@
         }
     }
 
-    $: value = getValue(template);
+    let value = $derived(getValue(template));
 </script>
 
 <select
     class="bg-gray-100 dark:bg-gray-900 rounded px-2 w-32"
     {value}
-    on:change={(e) => {
+    onchange={(e) => {
         if (e.target === null) return;
         template.name = undefined;
         template.dayOfWeek = undefined;

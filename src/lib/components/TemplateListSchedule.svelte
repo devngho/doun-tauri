@@ -1,3 +1,5 @@
+<!-- @migration-task Error while migrating Svelte code: `<h3>` cannot be a child of `<h2>`. The browser will 'repair' the HTML (by moving, removing, or inserting elements) which breaks Svelte's assumptions about the structure of your components.
+https://svelte.dev/e/node_invalid_placement -->
 <script lang="ts">
   import {} from "@tauri-apps/api";
   import { Time } from "../daytime";
@@ -30,13 +32,15 @@
   in:fadeSlide
   use:contextDropdown
 >
-  <h2 class="text-2xl flex flex-row items-center">
-    {value.getName()}
+  <div class="flex flex-row items-center">
+    <h2 class="text-2xl">
+      {value.getName()}
+    </h2>
     <h3 class="text-xl mx-1 text-gray-500 dark:text-gray-300">
       총 길이 {new Time(0, 0, getTotalTime(value.schedules)).fix().formatTime()}
     </h3>
-  </h2>
-  <div class="mx-2" />
+  </div>
+  <div class="mx-2"></div>
   <Dropdown>
     {#if $isDev}
       {id}
@@ -65,7 +69,7 @@
       on:click={async () => {
         if (
           await dialog.confirm(
-            `정말로 ${value.getName()} 템플릿을 삭제하시겠어요?`
+            `정말로 ${value.getName()} 템플릿을 삭제하시겠어요?`,
           )
         ) {
           schedules.update((v) => {

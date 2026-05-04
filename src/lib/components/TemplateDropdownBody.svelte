@@ -5,23 +5,27 @@
   import { dropdownContext } from "../dropdown";
   import { redirect } from "../page";
 
-  export let template: Schedules;
-  export let idx: number;
+  interface Props {
+    template: Schedules;
+    idx: number;
+  }
+
+  let { template = $bindable(), idx }: Props = $props();
 
   const { close } = getContext<{
-    close: (e: MouseEvent | undefined) => void;
+    close: (e?: MouseEvent) => void;
   }>(dropdownContext);
 </script>
 
 <button
-  on:click={() => {
+  onclick={() => {
     template.schedules.splice(idx, 1);
     template.schedules = template.schedules;
   }}>✕ 삭제</button
 >
 <!--Duplicate button-->
 <button
-  on:click={() => {
+  onclick={() => {
     const s = template.schedules[idx].copy();
     //@ts-ignore
     s["_uuid"] = crypto.randomUUID();

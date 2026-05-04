@@ -1,5 +1,10 @@
 <script lang="ts">
-    let style = "";
+    interface Props {
+        children?: import('svelte').Snippet;
+    }
+
+    let { children }: Props = $props();
+    let style = $state("");
 
     document.addEventListener("mousemove", (e) => {
         style = `top: 0; left: 0; margin-left: ${e.clientX}px; margin-top: ${e.clientY}px;`;
@@ -9,7 +14,7 @@
 <div class="hover w-4">
     <span class="hover-icon">🛈</span>
     <div class="hover-content fixed" {style}>
-        <slot />
+        {@render children?.()}
     </div>
 </div>
 

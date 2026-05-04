@@ -7,9 +7,14 @@
     } from "../../schedule";
     import { schedules } from "../../store";
     import { redirect } from "../../page";
+    interface Props {
+        [key: string]: any
+    }
+
+    let { ...props }: Props = $props();
 </script>
 
-<article id={$$props._page}>
+<article id={props._page}>
     <div class="w-screen h-screen flex flex-col p-8">
         <h1 class="text-5xl flex mb-6">예시 템플릿으로 시작할게요</h1>
         <p class="text-lg break-keep">
@@ -18,12 +23,12 @@
             나중에 가이드를 참고하세요.
         </p>
         <p class="text-lg text-gray-500">'정보' 탭에서 볼 수 있어요</p>
-        <div class="flex-grow" />
+        <div class="flex-grow"></div>
         <div class="flex flex-row">
-            <div class="flex-grow" />
+            <div class="flex-grow"></div>
             <button
                 class="text-2xl w-48"
-                on:click={() => {
+                onclick={() => {
                     schedules.update((v) => {
                         const id = "example";
                         v[id] = new Schedules({

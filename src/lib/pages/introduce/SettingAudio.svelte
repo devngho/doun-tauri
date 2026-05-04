@@ -4,13 +4,18 @@
     import { backStep, nextStep } from "./steps";
     import AudioSettings from "../settings/AudioSettings.svelte";
     import { currentOS } from "../../platform";
+    interface Props {
+        [key: string]: any
+    }
+
+    let { ...props }: Props = $props();
 
     onMount(() => {
         if (currentOS === "macos") nextStep();
     });
 </script>
 
-<article id={$$props._page}>
+<article id={props._page}>
     <div class="w-screen h-screen flex flex-col p-8">
         <h1 class="text-5xl flex mb-6">오디오를 설정합니다</h1>
         <p class="text-lg">
@@ -19,18 +24,18 @@
         </p>
         <p class="text-lg text-gray-500 mb-6">설정에서 다시 바꿀 수 있어요</p>
         <AudioSettings />
-        <div class="flex-grow" />
+        <div class="flex-grow"></div>
         <div class="flex flex-row">
             <button
                 class="text-2xl w-48 mr-8"
-                on:click={() => {
+                onclick={() => {
                     backStep();
                 }}>뒤로</button
             >
-            <div class="flex-grow" />
+            <div class="flex-grow"></div>
             <button
                 class="text-2xl w-48"
-                on:click={() => {
+                onclick={() => {
                     nextStep();
                 }}>설정했어요</button
             >

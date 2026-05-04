@@ -1,37 +1,42 @@
-<script>
+<script lang="ts">
   import { redirect } from "../page";
+  interface Props {
+    [key: string]: any
+  }
+
+  let { ...props }: Props = $props();
 </script>
 
-<article class="p-8 pt-24 w-screen" id={$$props._page}>
+<article class="p-8 pt-24 w-screen" id={props._page}>
   <div class="flex flex-col justify-center items-center w-screen">
     <h1 class="text-4xl">타종기</h1>
     <span class="text-xl">v1.0.6</span>
   </div>
 
-  <div class="h-4" />
+  <div class="h-4"></div>
   <h2 class="text-2xl">오픈 소스 라이선스</h2>
   <ul>
     <li>
       <a href="https://github.com/tauri-apps/tauri" target="_blank">tauri</a>
       -
-      <!-- svelte-ignore a11y-invalid-attribute -->
-      <a href="#" on:click={() => redirect("/license/apache-2.0")}>Apache-2.0</a
+      <!-- svelte-ignore a11y_invalid_attribute -->
+      <a href="#" onclick={() => redirect("/license/apache-2.0")}>Apache-2.0</a
       >,
-      <!-- svelte-ignore a11y-invalid-attribute -->
-      <a href="#" on:click={() => redirect("/license/mit")}>MIT License</a>
+      <!-- svelte-ignore a11y_invalid_attribute -->
+      <a href="#" onclick={() => redirect("/license/mit")}>MIT License</a>
       Copyright (c) 2017 - Present Tauri Apps Contributors
     </li>
     <li>
       <a href="https://tailwindcss.com" target="_blank">tailwindcss</a>
       -
-      <!-- svelte-ignore a11y-invalid-attribute -->
-      <a href="#" on:click={() => redirect("/license/mit")}>MIT License</a>
+      <!-- svelte-ignore a11y_invalid_attribute -->
+      <a href="#" onclick={() => redirect("/license/mit")}>MIT License</a>
       Copyright (c) Tailwind Labs, Inc.
     </li>
     <li>
       <a href="https://svelte.dev" target="_blank">Svelte</a> -
-      <!-- svelte-ignore a11y-invalid-attribute -->
-      <a href="#" on:click={() => redirect("/license/mit")}>MIT License</a>
+      <!-- svelte-ignore a11y_invalid_attribute -->
+      <a href="#" onclick={() => redirect("/license/mit")}>MIT License</a>
       Copyright (c) 2016-23
       <a
         href="https://github.com/sveltejs/svelte/graphs/contributors"
@@ -41,8 +46,8 @@
     <li>
       <a href="https://github.com/postcss/postcss" target="_blank">PostCSS</a>
       -
-      <!-- svelte-ignore a11y-invalid-attribute -->
-      <a href="#" on:click={() => redirect("/license/mit")}>MIT License</a>
+      <!-- svelte-ignore a11y_invalid_attribute -->
+      <a href="#" onclick={() => redirect("/license/mit")}>MIT License</a>
       Copyright 2013 Andrey Sitnik {"<andrey@sitnik.ru>"}
     </li>
     <li>
@@ -50,19 +55,19 @@
         >TypeScript</a
       >
       -
-      <!-- svelte-ignore a11y-invalid-attribute -->
-      <a href="#" on:click={() => redirect("/license/apache-2.0")}>Apache-2.0</a
+      <!-- svelte-ignore a11y_invalid_attribute -->
+      <a href="#" onclick={() => redirect("/license/apache-2.0")}>Apache-2.0</a
       >
       Microsoft Corporation
     </li>
     <li>
       <a href="https://github.com/RustAudio/rodio" target="_blank">rodio</a>
       -
-      <!-- svelte-ignore a11y-invalid-attribute -->
-      <a href="#" on:click={() => redirect("/license/mit")}>MIT License</a>
+      <!-- svelte-ignore a11y_invalid_attribute -->
+      <a href="#" onclick={() => redirect("/license/mit")}>MIT License</a>
       or
-      <!-- svelte-ignore a11y-invalid-attribute -->
-      <a href="#" on:click={() => redirect("/license/apache-2.0")}>Apache-2.0</a
+      <!-- svelte-ignore a11y_invalid_attribute -->
+      <a href="#" onclick={() => redirect("/license/apache-2.0")}>Apache-2.0</a
       >
     </li>
   </ul>
@@ -75,7 +80,7 @@
   </p>
   <p>
     <button
-      on:click={() => {
+      onclick={() => {
         redirect("/guide");
       }}>기능 설명</button
     >

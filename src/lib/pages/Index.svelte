@@ -4,14 +4,19 @@
     import ScheduleViewer from "../components/ScheduleViewer.svelte";
     import Timer from "../components/Timer.svelte";
     import { fadeSlide } from "../transition";
+    interface Props {
+        [key: string]: any
+    }
 
-    let viewType: "grouped" | "single" = "grouped";
-    let showDelay = false;
+    let { ...props }: Props = $props();
+
+    let viewType: "grouped" | "single" = $state("grouped");
+    let showDelay = $state(false);
 </script>
 
 <article
     class="h-fit flex flex-col justify-center items-center w-screen"
-    id={$$props._page}
+    id={props._page}
 >
     <section
         class="w-screen py-12 pb-8 fixed top-12 shadow-md rounded-3xl bg-gray-200 dark:bg-gray-900"

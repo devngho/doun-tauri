@@ -1,27 +1,30 @@
-<script>
+<script lang="ts">
   import { logs } from "../logger";
   import Log from "../components/Log.svelte";
   import { onDestroy } from "svelte";
+  interface Props {
+    [key: string]: any;
+  }
 
-  let filter = "";
-  let filteredLogs = $logs;
-  let autoScroll = true;
+  let { ...props }: Props = $props();
 
-  function update() {
+  let filter = $state("");
+  let filteredLogs = $state($logs);
+  let autoScroll = $state(true);
+
+  function update(logs: any[], filter: string) {
     console.log("Your filter is:" + filter);
-    filteredLogs = $logs.filter(
+    filteredLogs = logs.filter(
       (v) =>
         v.message?.includes(filter) === true ||
-        JSON.stringify(v.data)?.includes(filter) === true
+        JSON.stringify(v.data)?.includes(filter) === true,
     );
   }
 
-  $: {
-    filter;
-    update();
-  }
+  $effect(() => {
+    update($logs, filter);
+  });
 
-  logs.subscribe(update);
   const unsubscribe = logs.subscribe(() => {
     if (autoScroll) {
       window.scroll({
@@ -36,7 +39,7 @@
   });
 </script>
 
-<article class="p-8 pt-24" id={$$props._page}>
+<article class="p-8 pt-24" id={props._page}>
   <input
     type="text"
     bind:value={filter}

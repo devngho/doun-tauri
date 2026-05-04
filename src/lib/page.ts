@@ -1,4 +1,4 @@
-import type { SvelteComponentTyped } from "svelte";
+import type { SvelteComponent } from "svelte";
 import Index from "./pages/Index.svelte";
 import { writable, type Writable } from "svelte/store";
 import Info from "./pages/Info.svelte";

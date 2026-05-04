@@ -5,6 +5,11 @@
     import {} from "@tauri-apps/api";
     import TemplateListSchedule from "../components/TemplateListSchedule.svelte";
     import { compareDayOfWeek } from "../daytime";
+    interface Props {
+        [key: string]: any
+    }
+
+    let { ...props }: Props = $props();
 
     type GroupedSchedules = {
         timetable: {
@@ -63,15 +68,15 @@
             .reduce((a, b) => a + (b as DelaySchedule).delay, 0);
     }
 
-    $: grouped = groupSchedules($schedules);
-    $: sortedDayOfWeek = Array.from(Object.entries(grouped.dayOfWeek)).toSorted(
+    let grouped = $derived(groupSchedules($schedules));
+    let sortedDayOfWeek = $derived(Array.from(Object.entries(grouped.dayOfWeek)).toSorted(
         (a, b) => compareDayOfWeek(a[1].dayOfWeek!, b[1].dayOfWeek!),
-    );
+    ));
 </script>
 
 <article
     class="h-fit flex flex-col justify-center items-center w-screen"
-    id={$$props._page}
+    id={props._page}
 >
     <section
         class="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 mt-16 p-8 pb-0 w-screen gap-2"
@@ -111,7 +116,7 @@
     </section>
     <div class="p-8 pt-4 w-full flex justify-end">
         <button
-            on:click={() => {
+            onclick={() => {
                 redirect("/template-new");
             }}>새 템플릿</button
         >

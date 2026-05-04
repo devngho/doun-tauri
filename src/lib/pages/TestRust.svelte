@@ -1,15 +1,20 @@
-<script>
+<script lang="ts">
     // @ts-nocheck
 
     import { invoke } from "@tauri-apps/api/core";
     import { invokers } from "../tauri_invoker";
+    interface Props {
+        [key: string]: any
+    }
 
-    let selectedInvokers = "";
-    let invokerData = "";
-    let res = "";
+    let { ...props }: Props = $props();
+
+    let selectedInvokers = $state("");
+    let invokerData = $state("");
+    let res = $state("");
 </script>
 
-<article class="p-8 pt-24 w-screen" id={$$props._page}>
+<article class="p-8 pt-24 w-screen" id={props._page}>
     <select
         class="flex-grow bg-gray-100 dark:bg-gray-900 rounded px-2"
         bind:value={selectedInvokers}
@@ -28,7 +33,7 @@
     />
 
     <button
-        on:click={async () => {
+        onclick={async () => {
             res = await invoke(
                 selectedInvokers.trim(),
                 JSON.parse(invokerData),

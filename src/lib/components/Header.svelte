@@ -6,23 +6,22 @@
   import { refresh, delayCurrent } from "../play";
   import { onMount } from "svelte";
 
-  let saveStateDelayed: "working" | "error" | "ok" = "ok";
-  let pagePath = "";
+  let saveStateDelayed: "working" | "error" | "ok" = $state("ok");
+  let pagePath = $state(location.pathname);
 
-  $: {
-    $saveState;
-    if ($saveState !== "ok") {
-      saveStateDelayed = $saveState;
-      let k = setInterval(() => {
-        if ($saveState === "ok") {
-          saveStateDelayed = "ok";
-          clearInterval(k);
-        }
+  $effect(() => {
+    if ($saveState === "working") {
+      saveStateDelayed = "working";
+    } else if ($saveState === "error") {
+      saveStateDelayed = "error";
+    } else {
+      const timeout = setTimeout(() => {
+        saveStateDelayed = "ok";
       }, 1000);
-    }
-  }
 
-  $: pagePath = location.pathname;
+      return () => clearTimeout(timeout);
+    }
+  });
 
   onMount(() => {
     const destroy = new AbortController();
@@ -33,7 +32,7 @@
       () => {
         pagePath = location.pathname;
       },
-      { signal: destroy.signal }
+      { signal: destroy.signal },
     );
 
     // cleanup
@@ -48,54 +47,55 @@
 >
   <button
     class="tab"
-    on:click={() => {
+    onclick={() => {
       redirect("/");
     }}>홈</button
   >
-  <button class="tab" on:click={() => redirect("/info")}>정보</button>
+  <button class="tab" onclick={() => redirect("/info")}>정보</button>
   <button
     class="tab"
-    on:click={() => {
+    onclick={() => {
       redirect("/template");
     }}>템플릿</button
   >
   <button
     class="tab"
-    on:click={() => {
+    onclick={() => {
       redirect("/volume");
     }}>볼륨</button
   >
   <button
     class="tab"
-    on:click={() => {
+    onclick={() => {
       redirect("/settings");
     }}>설정</button
   >
   {#if saveStateDelayed === "ok"}
     <button
-      on:click={() => {
+      onclick={() => {
         saveAll();
       }}>저장하기</button
     >
   {:else}
     <button
-      on:click={() => {
+      onclick={() => {
         saveAll();
       }}
       class="flex flex-row items-center justify-center"
       disabled
+      aria-label="저장 중"
     >
-      <div class="loader" />
+      <div class="loader"></div>
     </button>
   {/if}
   <button
-    on:click={() => {
+    onclick={() => {
       refresh(true);
     }}>새로고침</button
   >
-  <button on:click={delayCurrent}> 미루기 </button>
+  <button onclick={delayCurrent}> 미루기 </button>
 
-  <div class="flex-grow" />
+  <div class="flex-grow"></div>
 
   {#if $nextSchedule}
     <div class="flex flex-col items-center justify-center mr-4 col-span-3">
@@ -116,11 +116,11 @@
 
   {#if $isDev}
     <button
-      on:click={() => redirect("/test-rust")}
+      onclick={() => redirect("/test-rust")}
       class="tab fixed top-0 right-0 w-32 h-8">invoke</button
     >
     <button
-      on:click={() => redirect("/log")}
+      onclick={() => redirect("/log")}
       class="tab fixed top-8 right-0 w-32 h-8">로그</button
     >
     <div
