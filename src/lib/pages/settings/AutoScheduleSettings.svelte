@@ -360,6 +360,7 @@
 </ul>
 
 <style lang="postcss">
+  @reference "../../../app.css";
   ul {
     list-style: none;
     margin-left: 0.5rem;

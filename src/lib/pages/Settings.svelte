@@ -24,7 +24,8 @@
 
   let superDounCount = $state(0);
   let delayTimeWithSuffix = $derived($settings.delayTime + "초");
-  let defferedColorSave: any | null = $state(null);
+  let defferedColorSaveTimeout: ReturnType<typeof setTimeout> | null = null;
+  let isDefferedColorSaveActive = $state(false);
 
   const settingsSubscription = settings.subscribe(() => saveAll());
   onDestroy(settingsSubscription);
@@ -43,15 +44,23 @@
   });
 
   function updateColor(rgb?: RgbaColor) {
+    if (!rgb) return;
+
+    const nextColor = rgbToHex(rgb.r, rgb.g, rgb.b);
+    if ($settings.primaryColor === nextColor) return;
+
     settings.update((v) => {
-      if (!rgb) return v;
-      v.primaryColor = rgbToHex(rgb?.r!, rgb?.g!, rgb?.b!);
+      v.primaryColor = nextColor;
       return v;
     });
-    clearTimeout(defferedColorSave);
-    defferedColorSave = setTimeout(() => {
+
+    if (defferedColorSaveTimeout !== null)
+      clearTimeout(defferedColorSaveTimeout);
+    isDefferedColorSaveActive = true;
+    defferedColorSaveTimeout = setTimeout(() => {
       saveAll();
-      defferedColorSave = null;
+      defferedColorSaveTimeout = null;
+      isDefferedColorSaveActive = false;
     }, 250);
   }
 
@@ -61,8 +70,9 @@
 </script>
 
 <svelte:head>
-  {#if defferedColorSave !== null}
+  {#if isDefferedColorSaveActive}
     <style>
+      @reference "../../app.css";
       button {
         transition-duration: 0s !important;
       }

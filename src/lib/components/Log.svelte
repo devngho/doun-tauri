@@ -22,6 +22,7 @@
 </div>
 
 <style>
+  @reference "../../app.css";
     div {
         @apply my-1;
     }

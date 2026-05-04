@@ -88,6 +88,7 @@
 </article>
 
 <style lang="postcss">
+  @reference "../../app.css";
   ul {
     list-style: disc;
     margin-left: 1rem;

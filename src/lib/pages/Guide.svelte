@@ -100,7 +100,7 @@
         총 길이 00:00:00
       </span>
     </span>
-    <div class="mr-2" />
+    <div class="mr-2"></div>
     <Dropdown
       ><button>삭제</button>
       <button>복제</button>
@@ -281,6 +281,7 @@
 </article>
 
 <style lang="postcss">
+  @reference "../../app.css";
   ul {
     list-style: disc;
     margin-left: 2rem;

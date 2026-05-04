@@ -1,5 +1,4 @@
 <script lang="ts">
-  import "../../app.css";
   import { redirect } from "../page";
   import { saveState, remainTime, nextSchedule, saveAll } from "../store";
   import { isDev } from "../dev";
@@ -132,6 +131,7 @@
 </header>
 
 <style lang="postcss">
+  @reference "../../app.css";
   .loader {
     @apply h-6 w-6 border-t-primary border-gray-100 rounded-full;
     border-width: 4px;

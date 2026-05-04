@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@config "../tailwind.config.js";
 
 @layer components {
   button:not(.except) {
@@ -10,7 +11,7 @@
   }
 
   button.error {
-    @apply bg-red-500 dark:bg-red-700 text-white !important;
+    @apply bg-red-500! dark:bg-red-700! text-white!;
   }
 
   button.unselected {
@@ -37,7 +38,7 @@ a {
 }
 
 .wrapper {
-  @apply dark:bg-gray-600 !important;
+  @apply dark:bg-gray-600!;
 }
 
 .input-container {
@@ -45,7 +46,7 @@ a {
 }
 
 .input-container > input {
-  @apply bg-transparent border-none focus:ring-0 focus:outline-none !important;
+  @apply !bg-transparent !border-none focus:!ring-0 focus:!outline-none;
 }
 
 .dropdown-content {
@@ -74,6 +75,9 @@ a {
   /* Internet Explorer 10+ */
   scrollbar-width: none;
   /* Firefox */
+}
+
+select {
 }
 
 *::-webkit-scrollbar {

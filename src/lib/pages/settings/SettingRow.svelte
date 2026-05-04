@@ -106,6 +106,8 @@
 {/if}
 
 <style lang="postcss">
+  @reference "../../../app.css";
+
   li {
     margin-top: 0.5rem;
     @apply flex;

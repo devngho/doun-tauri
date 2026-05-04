@@ -42,6 +42,7 @@
 <svelte:head>
   {#if defferedColorSave !== null}
     <style>
+  @reference "../../../app.css";
       button {
         transition-duration: 0s !important;
       }

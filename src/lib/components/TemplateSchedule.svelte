@@ -443,6 +443,7 @@
 {/if}
 
 <style lang="postcss">
+  @reference "../../app.css";
   .schedule {
     box-sizing: border-box;
     -moz-box-sizing: border-box;

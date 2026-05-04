@@ -167,6 +167,7 @@
 </article>
 
 <style lang="postcss">
+  @reference "../../app.css";
   ol {
     list-style-type: decimal;
   }

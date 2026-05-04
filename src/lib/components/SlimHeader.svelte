@@ -45,6 +45,7 @@
 </div>
 
 <style lang="postcss">
+  @reference "../../app.css";
   button:not(.fold) {
     @apply mr-2 p-1;
   }

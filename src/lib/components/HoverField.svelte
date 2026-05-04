@@ -22,6 +22,7 @@
 </div>
 
 <style lang="postcss">
+  @reference "../../app.css";
     .hover:hover {
         display: block;
     }

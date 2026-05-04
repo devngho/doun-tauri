@@ -112,6 +112,7 @@
 </article>
 
 <style lang="postcss">
+  @reference "../../app.css";
   ul {
     width: 100%;
   }

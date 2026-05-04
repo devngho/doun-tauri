@@ -139,6 +139,7 @@
 </article>
 
 <style lang="postcss">
+  @reference "../../app.css";
   button {
     @apply mx-2 flex-grow transition-all;
   }

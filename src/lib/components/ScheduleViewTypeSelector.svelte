@@ -23,6 +23,7 @@
 </section>
 
 <style lang="postcss">
+  @reference "../../app.css";
     button.groups {
         @apply transition-all col-span-2;
     }

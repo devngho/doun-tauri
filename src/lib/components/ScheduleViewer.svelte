@@ -128,4 +128,5 @@
 </section>
 
 <style lang="postcss">
+  @reference "../../app.css";
 </style>

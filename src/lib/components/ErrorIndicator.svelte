@@ -40,6 +40,7 @@
 </div>
 
 <style lang="postcss">
+  @reference "../../app.css";
   button {
     @apply w-24 h-16 text-sm;
   }

@@ -53,6 +53,7 @@
 
 <svelte:head>
   <style lang="postcss">
+  @reference "../../app.css";
     .dropdown-grid > button {
       @apply col-span-1 row-span-1 line-clamp-1;
     }
@@ -60,6 +61,7 @@
 </svelte:head>
 
 <style lang="postcss">
+  @reference "../../app.css";
   .dropdown-grid {
     @apply grid-cols-1;
   }

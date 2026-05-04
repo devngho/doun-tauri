@@ -5,7 +5,7 @@ import { resolve } from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({
-  plugins: [svelte(), tailwindcss()],
+  plugins: [tailwindcss(), svelte()],
   resolve: {
     alias: {
       $fonts: resolve('./font'),

@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from "svelte/legacy";
-
   import { onMount as onLoad } from "./lib/onMount";
   import { onMount } from "svelte";
   import "./app.css";
@@ -113,6 +111,7 @@
 <svelte:head>
   {#if isAprilFool}
     <style>
+  @reference "app.css";
       .flex-col {
         flex-direction: column-reverse !important;
       }

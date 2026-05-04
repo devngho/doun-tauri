@@ -9,7 +9,7 @@ use std::{
 
 extern crate dirs;
 use cpal::traits::{DeviceTrait, HostTrait};
-use rodio::{cpal, OutputStream};
+use rodio::{OutputStream, cpal};
 use zip::ZipWriter;
 
 #[tauri::command]
@@ -202,8 +202,12 @@ async fn is_first_launch() -> bool {
 }
 
 fn main() {
-    std::env::set_var("GDK_BACKEND", "wayland");
-    
+    #[cfg(target_os = "linux")]
+    unsafe {
+        std::env::set_var("WEBKIT_DISABLE_DMABUF_RENDERER", "1");
+        std::env::set_var("WEBKIT_DISABLE_COMPOSITING_MODE", "1");
+    }
+
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_dialog::init())
