@@ -1,57 +1,52 @@
 <script lang="ts">
-    import { DayOfWeek } from "../daytime";
-    import type { Schedules } from "../schedule";
-    import { Dates } from "../daytime";
+    import { Dates, DayOfWeek } from "../daytime";
+    import type { TemplateMeta } from "../template";
 
     interface Props {
-        template: Schedules;
+        meta: TemplateMeta;
+        // width class of the timetable number inputs
+        numberWidth?: string;
     }
 
-    let { template = $bindable() }: Props = $props();
-
-    function getDayweekName(dayOfWeek: string) {
-        return DayOfWeek[dayOfWeek as keyof typeof DayOfWeek];
-    }
+    let { meta = $bindable(), numberWidth = "w-16" }: Props = $props();
 </script>
 
-{#if template?.name !== undefined}
+{#if meta.name !== undefined}
     <!-- svelte-ignore a11y_invalid_attribute -->
     <input
         type="string"
         class="mr-1 bg-gray-100 dark:bg-gray-900 rounded px-2 w-64"
         placeholder="새 템플릿 이름"
-        bind:value={template.name}
+        bind:value={meta.name}
     />
-{:else if template?.specifyDate !== undefined}
+{:else if meta.specifyDate !== undefined}
     <input
         type="date"
         class="bg-gray-100 dark:bg-gray-900 rounded px-2 w-64"
-        value={template.specifyDate.formatTime()}
+        value={meta.specifyDate.formatTime()}
         onchange={(e) => {
-            if (e.target === null) return;
-            //@ts-ignore
-            template.specifyDate = Dates.parseDate(e.target.value);
+            meta.specifyDate = Dates.parseDate(e.currentTarget.value);
         }}
     />
-{:else if template?.dayOfWeek !== undefined}
+{:else if meta.dayOfWeek !== undefined}
     <select
-        bind:value={template.dayOfWeek}
+        bind:value={meta.dayOfWeek}
         class=" bg-gray-100 dark:bg-gray-900 rounded px-2 w-64"
     >
-        {#each Object.keys(DayOfWeek) as i}
-            <option value={i}>{getDayweekName(i)}</option>
+        {#each Object.values(DayOfWeek) as day}
+            <option value={day}>{day}</option>
         {/each}
     </select>
-{:else if template?.timeTableCount !== undefined}
+{:else if meta.timeTableCount !== undefined}
     <input
         type="number"
-        class="bg-gray-100 dark:bg-gray-900 rounded px-2 w-16"
-        bind:value={template.timeTableCount}
+        class={"bg-gray-100 dark:bg-gray-900 rounded px-2 " + numberWidth}
+        bind:value={meta.timeTableCount}
     />
     교시
     <input
         type="number"
-        class="bg-gray-100 dark:bg-gray-900 rounded px-2 w-16"
-        bind:value={template.timeTableLength}
+        class={"bg-gray-100 dark:bg-gray-900 rounded px-2 " + numberWidth}
+        bind:value={meta.timeTableLength}
     /> 분
 {/if}

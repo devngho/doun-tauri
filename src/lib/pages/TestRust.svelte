@@ -1,13 +1,9 @@
 <script lang="ts">
-    // @ts-nocheck
+    import type { PageProps } from "../page";
 
     import { invoke } from "@tauri-apps/api/core";
     import { invokers } from "../tauri_invoker";
-    interface Props {
-        [key: string]: any
-    }
-
-    let { ...props }: Props = $props();
+    let props: PageProps = $props();
 
     let selectedInvokers = $state("");
     let invokerData = $state("");
@@ -34,7 +30,7 @@
 
     <button
         onclick={async () => {
-            res = await invoke(
+            res = await invoke<string>(
                 selectedInvokers.trim(),
                 JSON.parse(invokerData),
             );

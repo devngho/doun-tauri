@@ -1,11 +1,8 @@
 <script lang="ts">
+  import type { PageProps } from "../page";
   import { saveAll, schedules, settings, volumeMixer } from "../store";
   import { fadeSlide } from "../transition";
-  interface Props {
-    [key: string]: any;
-  }
-
-  let { ...props }: Props = $props();
+  let props: PageProps = $props();
 
   let audioFiles = [
     ...new Set(
@@ -84,8 +81,7 @@
               placeholder=""
               value={$volumeMixer[i] * 100}
               onchange={(e) => {
-                //@ts-ignore
-                $volumeMixer[i] = e.target.value / 100;
+                $volumeMixer[i] = Number(e.currentTarget.value) / 100;
                 saveAll();
               }}
             />%

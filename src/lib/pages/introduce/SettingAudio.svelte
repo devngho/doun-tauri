@@ -1,14 +1,11 @@
 <script lang="ts">
+    import type { PageProps } from "../../page";
     import { onMount } from "svelte";
     import { saveAll, settings } from "../../store";
     import { backStep, nextStep } from "./steps";
     import AudioSettings from "../settings/AudioSettings.svelte";
     import { currentOS } from "../../platform";
-    interface Props {
-        [key: string]: any
-    }
-
-    let { ...props }: Props = $props();
+    let props: PageProps = $props();
 
     onMount(() => {
         if (currentOS === "macos") nextStep();

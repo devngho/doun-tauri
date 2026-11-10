@@ -1,18 +1,15 @@
 <script lang="ts">
-  import { logs } from "../logger";
+  import type { PageProps } from "../page";
+  import { logs, type Log as LogEntry } from "../logger";
   import Log from "../components/Log.svelte";
   import { onDestroy } from "svelte";
-  interface Props {
-    [key: string]: any;
-  }
-
-  let { ...props }: Props = $props();
+  let props: PageProps = $props();
 
   let filter = $state("");
   let filteredLogs = $state($logs);
   let autoScroll = $state(true);
 
-  function update(logs: any[], filter: string) {
+  function update(logs: LogEntry[], filter: string) {
     console.log("Your filter is:" + filter);
     filteredLogs = logs.filter(
       (v) =>

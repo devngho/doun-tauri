@@ -1,12 +1,9 @@
 <script lang="ts">
+    import type { PageProps } from "../../page";
     import Logo from "../../components/Logo.svelte";
 
     import { nextStep } from "./steps";
-    interface Props {
-        [key: string]: any
-    }
-
-    let { ...props }: Props = $props();
+    let props: PageProps = $props();
 </script>
 
 <article id={props._page}>

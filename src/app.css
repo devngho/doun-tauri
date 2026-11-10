@@ -1,6 +1,18 @@
 @import "tailwindcss";
 @config "../tailwind.config.js";
 
+/* Tailwind 4 dropped the pointer cursor on buttons; keep the v3 behaviour */
+@layer base {
+  button,
+  [role="button"] {
+    cursor: pointer;
+  }
+
+  :disabled {
+    cursor: default;
+  }
+}
+
 @layer components {
   button:not(.except) {
     @apply bg-primary hover:bg-primary-dark dark:bg-primary dark:hover:bg-primary-dark active:scale-90 text-white font-bold py-2 px-4 rounded transition-all ease-in-out shadow-md dark:shadow-gray-900;

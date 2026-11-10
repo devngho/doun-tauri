@@ -1,4 +1,5 @@
-<script>
+<script lang="ts">
+  import type { PageProps } from "../page";
   import { get } from "svelte/store";
   import Dropdown from "../components/Dropdown.svelte";
   import { DayOfWeek } from "../daytime";
@@ -7,9 +8,11 @@
   import { Schedules } from "../schedule";
   import { redirect } from "../page";
   import { contextDropdown } from "../dropdown";
+
+  let props: PageProps = $props();
 </script>
 
-<article class="p-8 pt-24 w-screen" id={$$props._page}>
+<article class="p-8 pt-24 w-screen" id={props._page}>
   <div class="flex flex-col justify-center items-center w-screen">
     <h1 class="text-4xl">타종기</h1>
     <span class="text-xl">v1.0.6</span>
@@ -52,7 +55,7 @@
   스케줄이란, 대기 / 가져오기 / 일반과 같이, 종소리를 재생하거나 일정 시간만큼 기다리는
   일정을 말합니다. 예를 들면:
   <div
-    class="w-100 bg-white shadow-md dark:bg-gray-700 p-4 my-2 rounded-md flex"
+    class="bg-white shadow-md dark:bg-gray-700 p-4 my-2 rounded-md flex"
     in:fadeSlide
     use:contextDropdown
   >
@@ -63,7 +66,7 @@
     <Dropdown>메뉴가 표시됩니다</Dropdown>
   </div>
   <div
-    class="w-100 bg-gray-300 dark:bg-gray-900 text-gray-700 dark:text-gray-300 p-4 my-2 rounded-md shadow-sm flex flex-row items-center"
+    class="bg-gray-300 dark:bg-gray-900 text-gray-700 dark:text-gray-300 p-4 my-2 rounded-md shadow-sm flex flex-row items-center"
     in:fadeSlide
     use:contextDropdown
   >
@@ -71,7 +74,7 @@
     <Dropdown>메뉴가 표시됩니다</Dropdown>
   </div>
   <div
-    class="w-100 bg-white dark:bg-gray-700 p-4 my-2 rounded-md shadow-md flex"
+    class="bg-white dark:bg-gray-700 p-4 my-2 rounded-md shadow-md flex"
     in:fadeSlide
     use:contextDropdown
   >
@@ -90,7 +93,7 @@
   템플릿은 여러 스케줄들을 모아놓은 것입니다. 위의 템플릿 탭에서 템플릿을 구경하고
   와도 좋겠네요.
   <div
-    class="flex flex-row bg-white dark:bg-gray-700 items-center w-100 shadow-md p-4 my-2 rounded-md transition-all"
+    class="flex flex-row bg-white dark:bg-gray-700 items-center shadow-md p-4 my-2 rounded-md transition-all"
     in:fadeSlide
     use:contextDropdown
   >
@@ -118,7 +121,6 @@
   </ul>
   <h2>실전</h2>
   <h3>템플릿 만들기</h3>
-  <!-- svelte-ignore a11y-invalid-attribute -->
   <p class="mt-4 mb-4">
     <button>이름</button>
     <button>요일</button>
@@ -126,7 +128,6 @@
     <button>특정일</button>
   </p>
   <p class="mb-4">
-    <!-- svelte-ignore a11y-invalid-attribute -->
     <input
       type="string"
       class="mr-1 bg-gray-100 dark:bg-gray-900 rounded px-2 flex-grow"
@@ -160,7 +161,7 @@
   아닌 경우 등)
   <br />
   <button
-    on:click={() => {
+    onclick={() => {
       schedules.update((v) => {
         const id = "example";
         v[id] = new Schedules({
@@ -183,7 +184,7 @@
   필요하다"같은 상황이죠.
   <h4 class="text-lg mt-2">A 템플릿</h4>
   <div
-    class="w-100 bg-white dark:bg-gray-700 p-4 my-2 rounded-md shadow-md flex"
+    class="bg-white dark:bg-gray-700 p-4 my-2 rounded-md shadow-md flex"
     in:fadeSlide
     use:contextDropdown
   >
@@ -192,7 +193,7 @@
   </div>
   <h4 class="text-lg mt-2">B 템플릿</h4>
   <div
-    class="w-100 bg-white dark:bg-gray-700 p-4 my-2 rounded-md shadow-md flex"
+    class="bg-white dark:bg-gray-700 p-4 my-2 rounded-md shadow-md flex"
     in:fadeSlide
     use:contextDropdown
   >
@@ -201,7 +202,7 @@
   </div>
   <h4 class="text-lg mt-2">'풀어서 보기' 화면</h4>
   <div
-    class="w-100 bg-red-300 dark:bg-red-700 p-4 rounded-md shadow-md mb-2"
+    class="bg-red-300 dark:bg-red-700 p-4 rounded-md shadow-md mb-2"
     in:fadeSlide
     use:contextDropdown
   >
@@ -225,7 +226,7 @@
   여러분이 '1교시(45분)' 등의 템플릿을 살펴보았다면, 뭔가 이상한 것을 보았을 겁니다.
   다음처럼요:
   <div
-    class="w-100 bg-gray-300 dark:bg-gray-900 text-gray-700 dark:text-gray-300 p-4 my-2 rounded-md shadow-sm flex flex-row items-center"
+    class="bg-gray-300 dark:bg-gray-900 text-gray-700 dark:text-gray-300 p-4 my-2 rounded-md shadow-sm flex flex-row items-center"
     in:fadeSlide
     use:contextDropdown
   >
@@ -233,7 +234,7 @@
     <Dropdown>메뉴가 표시됩니다</Dropdown>
   </div>
   <div
-    class="w-100 bg-white shadow-md dark:bg-gray-700 p-4 my-2 rounded-md flex"
+    class="bg-white shadow-md dark:bg-gray-700 p-4 my-2 rounded-md flex"
     in:fadeSlide
     use:contextDropdown
   >
@@ -246,7 +247,7 @@
     <Dropdown>메뉴가 표시됩니다</Dropdown>
   </div>
   <div
-    class="w-100 bg-gray-300 dark:bg-gray-900 text-gray-700 dark:text-gray-300 p-4 my-2 rounded-md shadow-sm flex flex-row items-center"
+    class="bg-gray-300 dark:bg-gray-900 text-gray-700 dark:text-gray-300 p-4 my-2 rounded-md shadow-sm flex flex-row items-center"
     in:fadeSlide
     use:contextDropdown
   >

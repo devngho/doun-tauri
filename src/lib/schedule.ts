@@ -22,7 +22,6 @@ export abstract class Schedule {
 		for (const [idx, schedule] of target.entries()) {
 			if (schedule instanceof SingleSchedule || schedule instanceof DelaySchedule) {
 				const newSchedule = schedule.copy();
-				//@ts-ignore
 				newSchedule.parent = calledFromGroup;
 				flatSchedules.push(newSchedule);
 			}
@@ -70,11 +69,13 @@ export abstract class Schedule {
 
 export class SingleSchedule implements Schedule {
 	constructor(public name: string, public sound: string, public group?: string) { }
+	// id of the template this was flattened from
+	parent?: string;
 
 	compile(): Schedule[] {
 		return [this];
 	}
-	copy(): Schedule {
+	copy(): SingleSchedule {
 		return new SingleSchedule(this.name, this.sound, this.group);
 	}
 }
@@ -82,14 +83,12 @@ export class SingleSchedule implements Schedule {
 export class DelaySchedule implements Schedule {
 	constructor(public name: string, public delay: number) { }
 	sound: string = "";
-	_hour: number | undefined = undefined;
-	_minute: number = 0;
-	_second: number = 0;
+	parent?: string;
 
 	compile(): Schedule[] {
 		return [this];
 	}
-	copy(): Schedule {
+	copy(): DelaySchedule {
 		return new DelaySchedule(this.name, this.delay);
 	}
 }
@@ -118,7 +117,12 @@ export interface ScheduleCompiled {
 	time: Time;
 	delay?: number;
 	group?: string;
+	parent?: string;
 }
+
+// shape of a schedule as stored in the save file
+type RawSchedule = { name: string; sound: string; delay?: number; scheduleId?: string };
+type RawDates = { year: number; month: number; day: number };
 
 export class Schedules {
 	schedules: Schedule[] = [];
@@ -133,26 +137,18 @@ export class Schedules {
 		dayOfWeek?: DayOfWeek;
 		timeTableCount?: number;
 		timeTableLength?: number;
-		specifyDate?: Dates;
+		specifyDate?: Dates | RawDates;
 		schedules: Schedule[];
 	}) {
-		this.name = data?.name;
-		this.dayOfWeek = data?.dayOfWeek;
-		this.timeTableCount = data?.timeTableCount;
-		this.timeTableLength = data?.timeTableLength;
-		this.specifyDate = data?.specifyDate;
-		this.schedules = data?.schedules;
+		this.name = data.name;
+		this.dayOfWeek = data.dayOfWeek;
+		this.timeTableCount = data.timeTableCount;
+		this.timeTableLength = data.timeTableLength;
+		this.schedules = data.schedules;
 
-		if (this.specifyDate !== undefined && !(this.specifyDate instanceof Dates)) {
-			this.specifyDate = new Dates(
-				//@ts-ignore
-				this.specifyDate.year,
-				//@ts-ignore
-				this.specifyDate.month,
-				//@ts-ignore
-				this.specifyDate.day
-			);
-		}
+		// a parsed save file has a plain object here
+		const date = data.specifyDate;
+		this.specifyDate = date && new Dates(date.year, date.month, date.day);
 	}
 
 	getName(): string {
@@ -174,29 +170,15 @@ export class Schedules {
 		})
 	}
 
+	// turns parsed plain objects into schedule instances, in place
 	static addDetails(newSchedule: Schedule[]) {
-		for (const key in newSchedule) {
-			//@ts-ignore
-			if (newSchedule[key].delay !== undefined)
-				newSchedule[key] = new DelaySchedule(
-					newSchedule[key].name,
-					//@ts-ignore
-					newSchedule[key].delay
-				);
-			//@ts-ignore
-			else if (newSchedule[key].scheduleId !== undefined)
-				newSchedule[key] = new GroupSchedule(
-					newSchedule[key].name,
-					//@ts-ignore
-					newSchedule[key].scheduleId
-				);
+		for (const [idx, raw] of (newSchedule as RawSchedule[]).entries()) {
+			if (raw.delay !== undefined)
+				newSchedule[idx] = new DelaySchedule(raw.name, raw.delay);
+			else if (raw.scheduleId !== undefined)
+				newSchedule[idx] = new GroupSchedule(raw.name, raw.scheduleId);
 			else
-				newSchedule[key] = new SingleSchedule(
-					newSchedule[key].name,
-					newSchedule[key].sound,
-					//@ts-ignore
-					newSchedule[key].scheduleId
-				);
+				newSchedule[idx] = new SingleSchedule(raw.name, raw.sound);
 		}
 	}
 }

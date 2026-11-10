@@ -1,4 +1,5 @@
 <script lang="ts">
+    import type { PageProps } from "../../page";
     import {
         DelaySchedule,
         GroupSchedule,
@@ -7,11 +8,7 @@
     } from "../../schedule";
     import { schedules } from "../../store";
     import { redirect } from "../../page";
-    interface Props {
-        [key: string]: any
-    }
-
-    let { ...props }: Props = $props();
+    let props: PageProps = $props();
 </script>
 
 <article id={props._page}>

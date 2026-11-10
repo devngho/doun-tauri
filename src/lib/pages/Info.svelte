@@ -1,10 +1,7 @@
 <script lang="ts">
+  import type { PageProps } from "../page";
   import { redirect } from "../page";
-  interface Props {
-    [key: string]: any;
-  }
-
-  let { ...props }: Props = $props();
+  let props: PageProps = $props();
 </script>
 
 <article class="p-8 pt-24 w-screen" id={props._page}>

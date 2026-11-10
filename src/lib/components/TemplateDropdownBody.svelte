@@ -1,36 +1,18 @@
 <script lang="ts">
-  import { getContext, setContext } from "svelte";
-  import type { Schedules } from "../schedule";
-  import Dropdown from "./Dropdown.svelte";
-  import { dropdownContext } from "../dropdown";
-  import { redirect } from "../page";
+  import { getContext } from "svelte";
+  import { dropdownContext, type DropdownContext } from "../dropdown";
+  import type { Row } from "../template";
 
-  interface Props {
-    template: Schedules;
-    idx: number;
-  }
+  let { rows = $bindable(), idx }: { rows: Row[]; idx: number } = $props();
 
-  let { template = $bindable(), idx }: Props = $props();
-
-  const { close } = getContext<{
-    close: (e?: MouseEvent) => void;
-  }>(dropdownContext);
+  const { close } = getContext<DropdownContext>(dropdownContext);
 </script>
 
-<button
-  onclick={() => {
-    template.schedules.splice(idx, 1);
-    template.schedules = template.schedules;
-  }}>✕ 삭제</button
->
+<button onclick={() => rows.splice(idx, 1)}>✕ 삭제</button>
 <!--Duplicate button-->
 <button
   onclick={() => {
-    const s = template.schedules[idx].copy();
-    //@ts-ignore
-    s["_uuid"] = crypto.randomUUID();
-    template.schedules.splice(idx + 1, 0, s);
-    template.schedules = template.schedules;
+    rows.splice(idx + 1, 0, { ...rows[idx], id: crypto.randomUUID() });
     close();
   }}>🗍 복제</button
 >

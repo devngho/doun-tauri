@@ -1,7 +1,4 @@
-<!-- @migration-task Error while migrating Svelte code: `<h3>` cannot be a child of `<h2>`. The browser will 'repair' the HTML (by moving, removing, or inserting elements) which breaks Svelte's assumptions about the structure of your components.
-https://svelte.dev/e/node_invalid_placement -->
 <script lang="ts">
-  import {} from "@tauri-apps/api";
   import { Time } from "../daytime";
   import { isDev } from "../dev";
   import { contextDropdown } from "../dropdown";
@@ -23,12 +20,11 @@ https://svelte.dev/e/node_invalid_placement -->
       .reduce((a, b) => a + (b as DelaySchedule).delay, 0);
   }
 
-  export let id: string;
-  export let value: Schedules;
+  let { id, value }: { id: string; value: Schedules } = $props();
 </script>
 
 <div
-  class="flex flex-row bg-white dark:bg-gray-700 items-center w-100 shadow-md p-4 rounded-md transition-all"
+  class="flex flex-row bg-white dark:bg-gray-700 items-center shadow-md p-4 rounded-md transition-all"
   in:fadeSlide
   use:contextDropdown
 >
@@ -45,7 +41,7 @@ https://svelte.dev/e/node_invalid_placement -->
     {#if $isDev}
       {id}
       <button
-        on:click={() => {
+        onclick={() => {
           const newId = crypto.randomUUID();
           const s = value.copy();
           schedules.update((v) => {
@@ -66,7 +62,7 @@ https://svelte.dev/e/node_invalid_placement -->
       >
     {/if}
     <button
-      on:click={async () => {
+      onclick={async () => {
         if (
           await dialog.confirm(
             `정말로 ${value.getName()} 템플릿을 삭제하시겠어요?`,
@@ -80,16 +76,16 @@ https://svelte.dev/e/node_invalid_placement -->
       }}>✕ 삭제</button
     >
     <button
-      on:click={() => {
+      onclick={() => {
         const id = crypto.randomUUID();
         $schedules[id] = value.copy();
         if (value.name) $schedules[id].name = value.name + " 복제";
         redirect(`/template/${id}`);
       }}>🗍 복제</button
     >
-    <button on:click={() => redirect(`/template/${id}`)}>✎ 편집</button>
+    <button onclick={() => redirect(`/template/${id}`)}>✎ 편집</button>
     <button
-      on:click={() => {
+      onclick={() => {
         const newSchedule = value.schedules;
         Schedules.addDetails(newSchedule);
         $schedule = newSchedule;

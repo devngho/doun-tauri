@@ -3,7 +3,6 @@
   import { saveState, remainTime, nextSchedule, saveAll } from "../store";
   import { isDev } from "../dev";
   import { refresh, delayCurrent } from "../play";
-  import { onMount } from "svelte";
 
   let saveStateDelayed: "working" | "error" | "ok" = $state("ok");
   let pagePath = $state(location.pathname);
@@ -22,24 +21,9 @@
     }
   });
 
-  onMount(() => {
-    const destroy = new AbortController();
-
-    // subscribe event listener
-    window.addEventListener(
-      "popstate",
-      () => {
-        pagePath = location.pathname;
-      },
-      { signal: destroy.signal },
-    );
-
-    // cleanup
-    return () => {
-      destroy.abort();
-    };
-  });
 </script>
+
+<svelte:window onpopstate={() => (pagePath = location.pathname)} />
 
 <header
   class="fixed top-0 w-screen grid grid-cols-24 bg-gray-100 dark:bg-gray-800 h-16 shadow-md z-10 transition-colors duration-500 !gap-0.5"

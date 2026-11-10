@@ -8,14 +8,13 @@
 
     interface Props {
         isAprilFool: boolean;
-        [key: string]: any
     }
 
-    let { ...props }: Props = $props();
+    let { isAprilFool }: Props = $props();
     let folded: boolean = $state(false);
 </script>
 
-<div class="grid grid-cols-5 gap-2 m-2" id={props._page}>
+<div class="grid grid-cols-5 gap-2 m-2">
     <div
         class={"flex flex-col justify-center w-full h-full bg-gray-300 dark:bg-gray-800 p-4 shadow-md rounded-md " +
             (folded ? "col-span-4" : "col-span-3")}
@@ -23,7 +22,7 @@
         <Timer isSlim={true} />
     </div>
     <SlimHeader bind:folded />
-    {#if props.isAprilFool}
+    {#if isAprilFool}
         <div class="col-span-5">
             <ScheduleViewer type="grouped" isSlim={true} showDelay={false} />
         </div>
@@ -59,7 +58,7 @@
             </h2>
         </div>
     </div>
-    {#if !props.isAprilFool}
+    {#if !isAprilFool}
         <div class="col-span-5">
             <ScheduleViewer type="grouped" isSlim={true} />
         </div>

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { fadeSlide } from "../../transition";
-  import { settings } from "../../store";
+  import { settings, type SettingType } from "../../store";
   import { getDayFromAPI } from "../../schedule";
   import { log } from "../../logger";
   import { onMount } from "svelte";
@@ -270,8 +270,8 @@
           }}
           value={$settings.autoSchedule.schoolType}
           change={(e) => {
-            //@ts-ignore
-            $settings.autoSchedule.schoolType = e;
+            $settings.autoSchedule.schoolType =
+              e as SettingType["autoSchedule"]["schoolType"];
             switch (e) {
               case "elementary":
                 $settings.autoSchedule.defaultPeriodTime = 40;

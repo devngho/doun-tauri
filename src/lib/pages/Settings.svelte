@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { PageProps } from "../page";
   import {
     saveAll,
     saveState,
@@ -16,11 +17,7 @@
   import UtilSettings from "./settings/UtilSettings.svelte";
   import AutoScheduleSettings from "./settings/AutoScheduleSettings.svelte";
   import * as dialog from "@tauri-apps/plugin-dialog";
-  interface Props {
-    [key: string]: any;
-  }
-
-  let { ...props }: Props = $props();
+  let props: PageProps = $props();
 
   let superDounCount = $state(0);
   let delayTimeWithSuffix = $derived($settings.delayTime + "초");

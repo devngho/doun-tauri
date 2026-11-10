@@ -1,9 +1,6 @@
 <script lang="ts">
-    interface Props {
-        [key: string]: any
-    }
-
-    let { ...props }: Props = $props();
+    import type { PageProps } from "../page";
+    let props: PageProps = $props();
 </script>
 
 <article class="p-8 pt-24" id={props._page}>

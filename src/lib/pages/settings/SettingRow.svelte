@@ -59,12 +59,7 @@
           bind:value
           class="bg-gray-300 dark:bg-gray-900 rounded px-2"
           onchange={(e) => {
-            // dispatch("change", {
-            //   //@ts-ignore
-            //   value: e.target.value,
-            // });
-            //@ts-ignore
-            change?.(e.target.value);
+            change?.(e.currentTarget.value);
           }}
         >
           {#each selector.fields as field}
@@ -80,8 +75,7 @@
           type="text"
           {value}
           oninput={(e) => {
-            //@ts-ignore
-            change?.(e.target.value);
+            change?.(e.currentTarget.value);
           }}
           class={"h-full bg-gray-100 dark:bg-gray-900 rounded px-2 " +
             inputStyle}
@@ -93,8 +87,7 @@
           type="number"
           {value}
           oninput={(e) => {
-            //@ts-ignore
-            change?.(e.target.value);
+            change?.(e.currentTarget.value);
           }}
           class={"text-right h-full bg-gray-100 dark:bg-gray-900 rounded px-2 " +
             inputStyle}

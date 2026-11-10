@@ -6,8 +6,9 @@
     }
 
     let { log }: Props = $props();
-    let length = JSON.stringify(log.data)?.length ?? 0;
-    let isLogFolded = $state(length > 100);
+    let length = $derived(JSON.stringify(log.data)?.length ?? 0);
+    let unfolded = $state(false);
+    let isLogFolded = $derived(length > 100 && !unfolded);
 </script>
 
 <div>
@@ -15,13 +16,13 @@
     {#if !isLogFolded}
         {JSON.stringify(log.data) ?? ""}
     {:else}
-        <button onclick={() => (isLogFolded = false)}>
+        <button onclick={() => (unfolded = true)}>
             {length}자 펼치기
         </button>
     {/if} : {log.time}
 </div>
 
-<style>
+<style lang="postcss">
   @reference "../../app.css";
     div {
         @apply my-1;

@@ -1,17 +1,16 @@
 <script lang="ts">
+  import type { PageProps } from "../../page";
   import { saveAll, settings } from "../../store";
   import DisplaySetting from "../settings/DisplaySetting.svelte";
   import { hexToRgb, rgbToHex } from "../../color";
   import type { RgbaColor } from "svelte-awesome-color-picker";
 
   import { backStep, nextStep } from "./steps";
-  interface Props {
-    [key: string]: any;
-  }
+  let props: PageProps = $props();
 
-  let { ...props }: Props = $props();
-
-  let defferedColorSave: any | null = $state(null);
+  // the timer is not state: the effect below must not depend on it
+  let defferedColorSaveTimeout: ReturnType<typeof setTimeout> | null = null;
+  let isDefferedColorSaveActive = $state(false);
 
   const p = hexToRgb($settings.primaryColor!);
   let rgb: RgbaColor | undefined = $state({
@@ -22,15 +21,23 @@
   });
 
   function updateColor(rgb?: RgbaColor) {
+    if (!rgb) return;
+
+    const nextColor = rgbToHex(rgb.r, rgb.g, rgb.b);
+    if ($settings.primaryColor === nextColor) return;
+
     settings.update((v) => {
-      if (!rgb) return v;
-      v.primaryColor = rgbToHex(rgb?.r!, rgb?.g!, rgb?.b!);
+      v.primaryColor = nextColor;
       return v;
     });
-    clearTimeout(defferedColorSave);
-    defferedColorSave = setTimeout(() => {
+
+    if (defferedColorSaveTimeout !== null)
+      clearTimeout(defferedColorSaveTimeout);
+    isDefferedColorSaveActive = true;
+    defferedColorSaveTimeout = setTimeout(() => {
       saveAll();
-      defferedColorSave = null;
+      defferedColorSaveTimeout = null;
+      isDefferedColorSaveActive = false;
     }, 250);
   }
 
@@ -40,7 +47,7 @@
 </script>
 
 <svelte:head>
-  {#if defferedColorSave !== null}
+  {#if isDefferedColorSaveActive}
     <style>
   @reference "../../../app.css";
       button {

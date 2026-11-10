@@ -1,14 +1,11 @@
 <script lang="ts">
+  import type { PageProps } from "../../page";
   import { onDestroy, onMount } from "svelte";
   import { saveAll, settings } from "../../store";
   import AutoScheduleSettings from "../settings/AutoScheduleSettings.svelte";
 
   import { backStep, nextStep } from "./steps";
-  interface Props {
-    [key: string]: any;
-  }
-
-  let { ...props }: Props = $props();
+  let props: PageProps = $props();
   onMount(() => {
     if ($settings.autoSchedule.enabled === false) nextStep();
   });

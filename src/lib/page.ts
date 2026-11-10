@@ -1,4 +1,4 @@
-import type { SvelteComponent } from "svelte";
+import type { Component } from "svelte";
 import Index from "./pages/Index.svelte";
 import { writable, type Writable } from "svelte/store";
 import Info from "./pages/Info.svelte";
@@ -22,7 +22,10 @@ import TemplateGuide from "./pages/introduce/TemplateGuide.svelte";
 import GuideIntro from "./pages/introduce/Guide.svelte";
 import TemplateNew from "./pages/TemplateNew.svelte";
 
-export const pages: { [key: string]: { component: ConstructorOfATypedSvelteComponent } } = {
+// props every page receives from App
+export type PageProps = { _page: string };
+
+export const pages: { [key: string]: { component: Component<PageProps> } } = {
 	"": {
 		'component': Index
 	},
@@ -86,7 +89,7 @@ export const pages: { [key: string]: { component: ConstructorOfATypedSvelteCompo
 	"introduce7": {
 		component: TemplateGuide
 	}
-} as const;
+};
 
 export function redirect(path: string) {
 	log({ message: `Redirecting to ${path}` });

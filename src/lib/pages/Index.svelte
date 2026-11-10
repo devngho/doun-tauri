@@ -1,14 +1,11 @@
 <script lang="ts">
+    import type { PageProps } from "../page";
     import NextSchedule from "../components/NextSchedule.svelte";
     import ScheduleViewTypeSelector from "../components/ScheduleViewTypeSelector.svelte";
     import ScheduleViewer from "../components/ScheduleViewer.svelte";
     import Timer from "../components/Timer.svelte";
     import { fadeSlide } from "../transition";
-    interface Props {
-        [key: string]: any
-    }
-
-    let { ...props }: Props = $props();
+    let props: PageProps = $props();
 
     let viewType: "grouped" | "single" = $state("grouped");
     let showDelay = $state(false);

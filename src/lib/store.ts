@@ -121,7 +121,7 @@ export async function loadAll() {
 
 		const parsedSettings = parsedData.settings;
 		if (currentOS === "macos")
-			parsedData.audioOutput = defaultOutput;
+			parsedSettings.audioOutput = defaultOutput;
 		settings.set(parsedSettings);
 
 		log({ message: 'raw parsed data', data: parsedData })

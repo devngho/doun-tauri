@@ -202,11 +202,9 @@ async fn is_first_launch() -> bool {
 }
 
 fn main() {
-    #[cfg(target_os = "linux")]
-    unsafe {
-        std::env::set_var("WEBKIT_DISABLE_DMABUF_RENDERER", "1");
-        std::env::set_var("WEBKIT_DISABLE_COMPOSITING_MODE", "1");
-    }
+    // Linux: if the window is blank or crashes, run with
+    // WEBKIT_DISABLE_DMABUF_RENDERER=1 (and, as a last resort,
+    // WEBKIT_DISABLE_COMPOSITING_MODE=1). Not forced: it makes rendering slow.
 
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())

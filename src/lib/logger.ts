@@ -1,7 +1,7 @@
 import { writable } from "svelte/store";
 import { Time } from "./daytime";
 
-export type Log = {message?: string, data?: any, time?: string}
+export type Log = {message?: string, data?: unknown, time?: string}
 export const logs = writable([] as Log[])
 
 export function log(data: Log) {

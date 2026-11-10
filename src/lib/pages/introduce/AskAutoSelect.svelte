@@ -1,11 +1,8 @@
 <script lang="ts">
+    import type { PageProps } from "../../page";
     import { backStep, nextStep } from "./steps";
     import { settings } from "../../store";
-    interface Props {
-        [key: string]: any
-    }
-
-    let { ...props }: Props = $props();
+    let props: PageProps = $props();
 </script>
 
 <article id={props._page}>

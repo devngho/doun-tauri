@@ -1,15 +1,12 @@
 <script lang="ts">
+    import type { PageProps } from "../page";
     import { daysOfWeek, schedules } from "../store";
     import { Schedule, DelaySchedule, Schedules } from "../schedule";
     import { redirect } from "../page";
     import {} from "@tauri-apps/api";
     import TemplateListSchedule from "../components/TemplateListSchedule.svelte";
     import { compareDayOfWeek } from "../daytime";
-    interface Props {
-        [key: string]: any
-    }
-
-    let { ...props }: Props = $props();
+    let props: PageProps = $props();
 
     type GroupedSchedules = {
         timetable: {

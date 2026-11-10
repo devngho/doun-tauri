@@ -57,8 +57,7 @@ export async function invokeTS<T extends keyof typeof invokers>(
 	args?: (typeof invokers)[T]["args"] | null | undefined
 ): Promise<(typeof invokers)[T]["resp"]> {
 	const s = performance.now();
-	//@ts-ignore
-	let v = await invoke(invoker, args);
+	const v = await invoke<(typeof invokers)[T]["resp"]>(invoker, args ?? undefined);
 	log({
 		message: `${invoker}`, data: {
 			request: args,
@@ -66,6 +65,5 @@ export async function invokeTS<T extends keyof typeof invokers>(
 			duration: `${Math.round(performance.now() - s)}ms`
 		}
 	})
-	//@ts-ignore
 	return v;
 }

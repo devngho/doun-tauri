@@ -1,14 +1,13 @@
+// opens the child dropdown at the cursor on right click
 export function contextDropdown(node: HTMLElement) {
     const handler = (e: MouseEvent) => {
-        const dropdown = node.querySelector('.dropdown') as HTMLElement | null
-        if (dropdown) {
-            const virtualEvent = new MouseEvent('click', {
-                clientX: e.clientX,
-                clientY: e.clientY,
-                relatedTarget: e.relatedTarget,
-            })
-            dropdown.dispatchEvent(virtualEvent)
-        }
+        // bubbles: Svelte 5 delegates onclick to the root
+        node.querySelector('.dropdown')?.dispatchEvent(new MouseEvent('click', {
+            clientX: e.clientX,
+            clientY: e.clientY,
+            relatedTarget: e.relatedTarget,
+            bubbles: true,
+        }))
         e.preventDefault()
     }
     node.addEventListener('contextmenu', handler)
@@ -19,4 +18,5 @@ export function contextDropdown(node: HTMLElement) {
     }
 }
 
+export type DropdownContext = { close: () => void }
 export const dropdownContext = Symbol('dropdownContext')

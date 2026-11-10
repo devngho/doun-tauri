@@ -55,8 +55,8 @@
             fields: audioOutputs.map((v) => ({ id: v, name: v })),
         }}
         value={$settings.audioOutput}
-        on:change={(e) => {
-            $settings.audioOutput = e.detail.value;
+        change={(v) => {
+            $settings.audioOutput = String(v);
         }}
     >
         {#snippet name()}
@@ -85,9 +85,5 @@
     ul {
         list-style: none;
         margin-left: 0.5rem;
-    }
-    li {
-        margin-top: 0.5rem;
-        @apply flex;
     }
 </style>

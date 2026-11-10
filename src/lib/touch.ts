@@ -1,4 +1,4 @@
-export function getXY(e: MouseEvent | TouchEvent) {
+export function getXY(e: MouseEvent | TouchEvent): [number, number] {
     if (e instanceof MouseEvent) return [e.clientX, e.clientY]
     else {
         const touch = e.touches[0] ?? e.targetTouches[0] ?? e.changedTouches[0]

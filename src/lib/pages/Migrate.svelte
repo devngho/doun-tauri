@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { PageProps } from "../page";
   import { get } from "svelte/store";
   import { loadAll, saveAll, saveAllAsRaw, schedules } from "../store";
   import { invokeTS } from "../tauri_invoker";
@@ -6,11 +7,7 @@
   import { onMount } from "svelte";
   import { SingleSchedule } from "../schedule";
   import * as dialog from "@tauri-apps/plugin-dialog";
-  interface Props {
-    [key: string]: any;
-  }
-
-  let { ...props }: Props = $props();
+  let props: PageProps = $props();
 
   function getFileName(path: string) {
     return path.split(/\/|\\/).slice(-1)[0];

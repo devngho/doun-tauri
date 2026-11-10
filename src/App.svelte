@@ -1,13 +1,14 @@
 <script lang="ts">
   import { onMount as onLoad } from "./lib/onMount";
   import { onMount } from "svelte";
+  import { MediaQuery } from "svelte/reactivity";
   import "./app.css";
   import Header from "./lib/components/Header.svelte";
-  import { pages, redirect } from "./lib/page.js";
+  import { pages } from "./lib/page.js";
   import { daysOfWeek, settings } from "./lib/store.js";
   import ErrorIndicator from "./lib/components/ErrorIndicator.svelte";
   import { log } from "./lib/logger";
-  import { Dates, Time } from "./lib/daytime";
+  import { Dates } from "./lib/daytime";
   import { hexToRgb, rgbToHSL } from "./lib/color";
   import SlimIndex from "./lib/pages/SlimIndex.svelte";
 
@@ -16,13 +17,11 @@
 
   let isIntroducePage = $derived(currentPage.startsWith("introduce"));
 
-  daysOfWeek.subscribe((_) => {
+  // re-check on every day change
+  $effect(() => {
+    $daysOfWeek;
     const now = Dates.now();
-    if (now.compare(new Dates(now.year, 4, 1)) === 0) {
-      isAprilFool = true;
-    } else {
-      isAprilFool = false;
-    }
+    isAprilFool = now.compare(new Dates(now.year, 4, 1)) === 0;
   });
 
   function updatePage() {
@@ -37,39 +36,28 @@
     log({ message: `current page: ${currentPage}` });
   });
 
-  window.addEventListener("popstate", updatePage);
-
   let isInitFunc: Promise<void> | null = $state(null);
   onMount(() => {
     isInitFunc = onLoad();
     updatePage();
   });
 
-  let isSlimQuery = window.matchMedia("(max-width: 1024px)");
-  let isSlim = $state(isSlimQuery.matches);
-  isSlimQuery.addEventListener(
-    "change",
-    (e) => (isSlim = $settings.useSlim ? e.matches : false),
-  );
+  const slimQuery = new MediaQuery("max-width: 1024px");
+  let isSlim = $derived($settings.useSlim && slimQuery.current);
 
-  let cssVar = $state(`
-	--color-primary: ${hexToRgb($settings.primaryColor).join(" ")};
-	--color-primary-h: ${rgbToHSL($settings.primaryColor)[0]};
-	--color-primary-s: ${rgbToHSL($settings.primaryColor)[1]}%;
-	--color-primary-l: ${rgbToHSL($settings.primaryColor)[2]}%;
-	--theme: ${$settings.theme};
-	`);
-
-  settings.subscribe((v) => {
-    cssVar = `
-		--color-primary: ${hexToRgb(v.primaryColor).join(" ")};
-		--color-primary-h: ${rgbToHSL(v.primaryColor)[0]};
-		--color-primary-s: ${rgbToHSL(v.primaryColor)[1]}%;
-		--color-primary-l: ${rgbToHSL(v.primaryColor)[2]}%;
-		--theme: ${v.theme};
+  let cssVar = $derived.by(() => {
+    const [h, s, l] = rgbToHSL($settings.primaryColor);
+    return `
+		--color-primary: ${hexToRgb($settings.primaryColor).join(" ")};
+		--color-primary-h: ${h};
+		--color-primary-s: ${s}%;
+		--color-primary-l: ${l}%;
+		--theme: ${$settings.theme};
 		`;
   });
 </script>
+
+<svelte:window onpopstate={updatePage} />
 
 <div
   class={$settings.theme === "dark" ? " dark" : ""}
@@ -92,9 +80,10 @@
         <Header />
       {/if}
 
+      <!-- also renders before loading starts, so intro transitions play once data arrives -->
       {#await isInitFunc then}
-        {@const SvelteComponent = pages[currentPage].component}
-        <SvelteComponent _page={currentPage} />
+        {@const Page = pages[currentPage].component}
+        <Page _page={currentPage} />
       {/await}
     {:else}
       <SlimIndex {isAprilFool} />

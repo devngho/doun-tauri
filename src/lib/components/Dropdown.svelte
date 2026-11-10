@@ -1,53 +1,39 @@
 <script lang="ts">
-  import { onMount, onDestroy, setContext } from "svelte";
+  import { setContext, type Snippet } from "svelte";
   import { getXY } from "../touch";
-  import { fade } from "svelte/transition";
-  import { dropdownContext } from "../dropdown";
-  let isOpen = false;
-  let button: HTMLElement | null = null;
-  let pos: number[] = [0, 0];
+  import { dropdownContext, type DropdownContext } from "../dropdown";
 
-  const close = (e: MouseEvent | undefined) => {
-    if (e?.target !== button && isOpen) {
-      console.log("close");
-      setImmediate(() => {
-        isOpen = false;
-      });
-    }
+  let { children }: { children?: Snippet } = $props();
+
+  let isOpen = $state(false);
+  let pos = $state([0, 0]);
+
+  // deferred so the click that triggered it finishes first
+  const close = () => {
+    if (isOpen) setTimeout(() => (isOpen = false));
   };
 
-  onMount(() => {
-    document.addEventListener("click", close);
-    document.addEventListener("contextmenu", close);
-  });
-
-  onDestroy(() => {
-    document.removeEventListener("click", close);
-    document.removeEventListener("contextmenu", close);
-  });
-
-  setContext(dropdownContext, { close });
+  setContext<DropdownContext>(dropdownContext, { close });
 </script>
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<!-- svelte-ignore missing-declaration -->
+<svelte:document onclick={close} oncontextmenu={close} />
+
+<!-- svelte-ignore a11y_click_events_have_key_events -->
 <div
-  on:click={(e) => {
-    if (!isOpen) [pos[0], pos[1]] = getXY(e);
-    setImmediate(() => {
-      isOpen = !isOpen;
-    });
+  onclick={(e) => {
+    if (!isOpen) pos = getXY(e);
+    setTimeout(() => (isOpen = !isOpen));
     e.preventDefault();
   }}
   aria-haspopup="true"
   role="button"
   tabindex="0"
   class={"dropdown grid fixed gap-2 w-32 transition-opacity bg-gray-300 dark:bg-gray-800 shadow-md rounded-md dropdown-grid " +
-    (isOpen ? "p-2 opacity-1" : "opacity-0")}
+    (isOpen ? "p-2 opacity-100" : "opacity-0")}
   style={`left: ${pos[0]}px; top: ${pos[1]}px`}
 >
   {#if isOpen}
-    <slot />
+    {@render children?.()}
   {/if}
 </div>
 
