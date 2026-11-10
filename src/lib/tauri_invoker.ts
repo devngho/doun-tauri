@@ -18,6 +18,10 @@ export const invokers = {
 		args: {} as { path: string, volume: number, output: string },
 		resp: null,
 	},
+	set_bells: {
+		args: {} as { bells: { time: number, path: string, volume: number }[], output: string, tolerance: number },
+		resp: null,
+	},
 	get_website_text: {
 		args: {} as { url: string },
 		resp: {} as string,

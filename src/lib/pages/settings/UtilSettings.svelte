@@ -142,6 +142,26 @@
   </li>
   <li>
     <div>
+      늦은 타종 허용
+      <p class="text-gray-500">
+        프로그램이 멈추거나 시계가 바뀌어 제때 울리지 못한 종을 몇 초 늦게까지
+        울릴지 설정합니다. 0이면 정확한 시각에만 울립니다.
+      </p>
+    </div>
+    <div class="flex-grow"></div>
+
+    <div class="bg-gray-100 dark:bg-gray-900 rounded flex items-center">
+      <input
+        type="number"
+        min="0"
+        bind:value={$settings.lateTolerance}
+        class="text-right w-24 h-full bg-gray-100 dark:bg-gray-900 rounded px-2"
+      />
+      초
+    </div>
+  </li>
+  <li>
+    <div>
       백업
       <p class="text-gray-500">
         설정과 오디오 파일을 묶어 내보냅니다. 백업이나 다른 컴퓨터로 옮길 때

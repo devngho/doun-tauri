@@ -6,7 +6,6 @@ import { Time } from "./daytime";
 import { log } from "./logger";
 
 export let appliedSchedule: Writable<Schedules | null> = writable(null);
-export let lastPlayedSchedule: Writable<ScheduleCompiled | null | undefined> = writable(undefined);
 export let lastSchedule: Writable<Schedule[]> = writable([]);
 export let lastComputed: Writable<ScheduleCompiled[]> = writable([]);
 
@@ -37,28 +36,6 @@ export function refresh(force: boolean = false) {
         .filter((v) => v.sound !== "_delayed")
         .find((v) => v.time.compare(get(now)) >= 0));
 
-    // play audio if next schedule time is now
-    if (get(nextSchedule) && get(nextSchedule)!.time.compare(get(now)) === 0) {
-        if (get(lastPlayedSchedule) !== get(nextSchedule)) {
-            lastPlayedSchedule.set(get(nextSchedule));
-            log({
-                message: "play audio",
-                data: {
-                    ...get(nextSchedule),
-                    time: get(nextSchedule)!.time.formatTime(),
-                    _time: Date.now()
-                }
-            })
-            invokeTS("play_audio", {
-                path: get(nextSchedule)!.sound,
-                volume: get(volumeMixer)[get(nextSchedule)!.sound] ?? 1.0,
-                output: get(settings).audioOutput
-            })
-        }
-    } else {
-        lastPlayedSchedule.set(null);
-    }
-
     if (get(nextSchedule))
         remainTime.set(new Time(
             0,
@@ -66,6 +43,32 @@ export function refresh(force: boolean = false) {
             get(nextSchedule)!.time.compare(get(now))
         ).fix());
     else remainTime.set(new Time(24, 0, 0));
+}
+
+let lastPushed = "";
+
+// sends today's bells to the backend, which decides when to ring them
+export function pushBells() {
+    const { audioOutput, lateTolerance } = get(settings);
+    const mixer = get(volumeMixer);
+    const args = {
+        bells: get(lastComputed)
+            // entries like _delayed and _error are not sounds
+            .filter((v) => v.sound !== "" && !v.sound.startsWith("_"))
+            .map((v) => ({
+                time: v.time.hour * 3600 + v.time.minute * 60 + v.time.second,
+                path: v.sound,
+                volume: mixer[v.sound] ?? 1.0,
+            })),
+        output: audioOutput,
+        tolerance: Math.max(0, Math.round(Number(lateTolerance) || 0)),
+    };
+
+    // the stores also fire when nothing relevant changed
+    const pushed = JSON.stringify(args);
+    if (pushed === lastPushed) return;
+    lastPushed = pushed;
+    invokeTS("set_bells", args);
 }
 
 export function delayCurrent() {

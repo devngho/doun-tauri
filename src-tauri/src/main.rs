@@ -9,8 +9,10 @@ use std::{
 
 extern crate dirs;
 use cpal::traits::{DeviceTrait, HostTrait};
-use rodio::{OutputStream, cpal};
+use rodio::cpal;
 use zip::ZipWriter;
+
+mod ringer;
 
 #[tauri::command]
 fn save_data(data: &str) -> bool {
@@ -83,21 +85,9 @@ fn get_default_audio_output() -> String {
 
 #[tauri::command]
 async fn play_audio(path: String, volume: f32, output: String) {
-    let host = cpal::default_host();
-    let devices = host.devices().unwrap();
-    let device: rodio::Device = devices
-        .into_iter()
-        .find(|x| x.name().unwrap() == output)
-        .unwrap()
-        .into();
-    let (_stream, stream_handle) = OutputStream::try_from_device(&device).unwrap();
-    let sink = stream_handle.play_once(File::open(path).unwrap()).unwrap();
-    sink.set_volume(volume);
-    println!("Converted volume: {}", volume);
-    sink.play();
-
-    // Wait until the sound has finished playing.
-    sink.sleep_until_end();
+    if let Err(e) = ringer::play(&path, volume, &output) {
+        println!("failed to play {path}: {e}");
+    }
 }
 
 #[tauri::command]
@@ -206,7 +196,11 @@ fn main() {
     // WEBKIT_DISABLE_DMABUF_RENDERER=1 (and, as a last resort,
     // WEBKIT_DISABLE_COMPOSITING_MODE=1). Not forced: it makes rendering slow.
 
+    let bells = ringer::SharedRinger::default();
+    ringer::start(bells.clone());
+
     tauri::Builder::default()
+        .manage(bells)
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_dialog::init())
         .invoke_handler(tauri::generate_handler![
@@ -214,6 +208,7 @@ fn main() {
             save_data,
             load_data,
             play_audio,
+            ringer::set_bells,
             get_website_text,
             call_command_line,
             get_audio_outputs,

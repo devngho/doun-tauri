@@ -23,6 +23,8 @@ export type SettingType = {
 	superDoun: boolean,
 	primaryColor: string,
 	delayTime: number,
+	// how many seconds late a bell may still ring
+	lateTolerance: number,
 	autoSchedule: {
 		enabled: boolean,
 		schoolType: 'elementary' | 'middle' | 'high',
@@ -41,6 +43,7 @@ export const settings = writable<SettingType>({
 	'superDoun': false,
 	'primaryColor': rgbToHex(59, 130, 246),
 	'delayTime': 10,
+	'lateTolerance': 5,
 	'autoSchedule': {
 		'enabled': true,
 		'schoolType': 'elementary',
@@ -89,6 +92,7 @@ export async function loadAll() {
 				"superDoun": false,
 				"primaryColor": rgbToHex(59, 130, 246),
 				"delayTime": 10,
+				"lateTolerance": 5,
 				"autoSchedule": {
 					"enabled": true,
 					"schoolType": "elementary",
@@ -136,6 +140,7 @@ export async function loadAll() {
 				superDoun: v?.superDoun ?? false,
 				primaryColor: v?.primaryColor ?? rgbToHex(59, 130, 246),
 				delayTime: v?.delayTime ?? 10,
+				lateTolerance: v?.lateTolerance ?? 5,
 				autoSchedule: v?.autoSchedule ?? {
 					enabled: v?.autoSchedule?.enabled ?? true,
 					schoolType: v?.autoSchedule?.schoolType ?? 'elementary',

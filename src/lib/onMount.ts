@@ -1,10 +1,10 @@
 import { get } from "svelte/store";
-import { loadAll, now, saveAll, schedule, settings } from "./store";
+import { loadAll, now, saveAll, schedule, settings, volumeMixer } from "./store";
 import { invokeTS } from "./tauri_invoker";
 import { Time } from "./daytime";
 import { isDev } from "./dev";
 import { log } from "./logger";
-import { refresh } from "./play";
+import { lastComputed, pushBells, refresh } from "./play";
 import { setInterval, setTimeout } from "worker-timers";
 import { updateSchedules } from "./schedule";
 import { redirect } from "./page";
@@ -42,6 +42,11 @@ export async function onMount() {
 	schedule.subscribe(() => {
 		refresh(true)
 	})
+
+	// everything the backend needs to ring
+	lastComputed.subscribe(pushBells)
+	volumeMixer.subscribe(pushBells)
+	settings.subscribe(pushBells)
 
 	updateSchedules()
 
